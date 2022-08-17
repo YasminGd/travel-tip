@@ -81,15 +81,12 @@ function onRemovePlace(placeId) {
 }
 
 function onAddPlace(pos, name) {
-    locService.addPlace(pos, name).then(() => {
-        renderPlaces()
-        renderWeather(pos)
-    })
+    locService.addPlace(pos, name)
+    renderPlaces()
 }
 
-function onMoveTo(lat, lng) {
-    mapService.moveTo(lat, lng)
-    renderWeather({ lat, lng })
+function onMoveTo(lat, lng, zoom) {
+    mapService.moveTo(lat, lng, zoom)
 }
 
 function renderPlaces() {
@@ -97,13 +94,10 @@ function renderPlaces() {
     const strHTML = places
         .map(
             (place) => `
-        <li id="${place.id
-                }" class="place list-group-item"><img src="img/placemarker.png" alt="" />${place.name
-                }, lat: ${place.pos.lat.toFixed(3)}, lng: ${place.pos.lng.toFixed(
-                    3
-                )}<span class="point" onclick="app.onMoveTo(${place.pos.lat},${place.pos.lng
-                })"> Go There 👆</span><span onclick="app.onRemovePlace('${place.id
-                }')">X</span></li>`
+        <li id="${place.id}">
+            <img src="img/placemarker.png"/><span class="name-pos">${place.name}</span>, lat: ${place.pos.lat.toFixed(3)}, lng: ${place.pos.lng.toFixed(3)}
+            <br><span class="go-to-loc" onclick="app.onMoveTo(${place.pos.lat},${place.pos.lng})"> Go There 👆</span>
+            <br><span class="delete-loc" onclick="app.onRemovePlace('${place.id}')"><img src="img/trash.png" /></span></li>`
         ).join('')
 
     document.querySelector('.places-list').innerHTML = strHTML
@@ -141,17 +135,4 @@ function renderMapQueryParams() {
 
     if (!lat || !lng) return Promise.reject()
     else return Promise.resolve({ lat, lng })
-}
-
-function renderWeather(pos) {
-    const weather = locService.getPlaceByPos(pos).weather
-
-    const weatherHTML = `
-        <h2>Weather today</h2>
-        <p>${weather.description}</p>
-        <p>${weather.temp}°C temperature from ${weather.minTemp}°C to ${weather.maxTemp}°C, wind ${weather.wind} m/s.</p>
-    `
-
-    document.querySelector('.weather').innerHTML = weatherHTML
-    
 }

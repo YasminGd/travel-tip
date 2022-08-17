@@ -84,7 +84,7 @@ function moveTo(lat, lng, zoom) {
     })
     new google.maps.Marker({
         position: pos,
-        gMap,
+        map: gMap,
     })
 }
 

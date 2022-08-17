@@ -7,16 +7,13 @@ window.app = {
     onPanTo,
     onGetLocs,
     onGetUserPos,
-<<<<<<< HEAD
     onAddPlace,
     onRemovePlace,
     renderPlaces,
     onMoveTo,
-=======
     onPanToMyLocation,
     onSearchLoc,
     onCopyLink,
->>>>>>> 187e16099e3dffc073fcaf742a278b581afb53b9
 }
 
 function onInit() {
@@ -34,12 +31,7 @@ function onInit() {
                 })
                 .catch(() => console.log('Error: cannot init map'))
         })
-<<<<<<< HEAD
-        .catch(() => console.log('Error: cannot init map'))
-        renderPlaces()
-=======
-
->>>>>>> 187e16099e3dffc073fcaf742a278b581afb53b9
+    renderPlaces()
 }
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
@@ -147,4 +139,3 @@ function renderMapQueryParams() {
     if (!lat || !lng) return Promise.reject()
     else return Promise.resolve({ lat, lng })
 }
->>>>>>> 187e16099e3dffc073fcaf742a278b581afb53b9

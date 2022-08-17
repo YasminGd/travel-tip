@@ -1,5 +1,6 @@
 import { utilService } from './util.service.js'
 import { storageService } from './storage.service.js'
+import { weatherService } from './weather.service.js'
 
 export const locService = {
     getLocs,
@@ -7,7 +8,8 @@ export const locService = {
     addPlace,
     getGLocs,
     getPlaceIdxByID,
-    removePlace
+    removePlace,
+    getPlaceByPos
 }
 
 
@@ -23,12 +25,27 @@ function getLocs() {
 
 // {id, name, lat, lng, weather, createdAt, updatedAt}
 function addPlace(pos, name) {
-    gLocs.push({ id: utilService.makeId(3), pos, name })
-    storageService.save('places', gLocs)
+    return weatherService.getWeather(pos)
+        .then(weather => {
+            const loc = {
+                id: utilService.makeId(3),
+                pos,
+                name,
+                createdAt: Date.now(),
+                updatedAt: Date.now(),
+                weather
+            }
+            gLocs.push(loc)
+            storageService.save('places', gLocs)
+        })
 }
 
 function getPlaceIdxByID(placeId) {
     return gLocs.findIndex((place) => placeId === place.id)
+}
+
+function getPlaceByPos(pos) {
+    return gLocs.find((place) => place.pos.lat === pos.lat && place.pos.lng === pos.lng)
 }
 
 function getGLocs() {
@@ -55,4 +72,15 @@ function getLocCords(loc) {
         })
 }
 
-
+// function updateWeather(id) {
+//     const place = getPlaceByID(id)
+//     if (Date.now() - place.updatedAt > 1000 * 60 * 60 * 24) {
+//         weatherService.getWeather(place.pos)
+//             .then(weather => {
+//                 place.weather = weather
+//                 place.updatedAt = Date.now()
+//             })
+//     }
+//     console.log(place);
+//     mapService.moveTo(place.pos.lat, place.pos.lng)
+// }

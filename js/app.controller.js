@@ -30,7 +30,12 @@ function onInit() {
                     console.log('Map is ready')
                 })
                 .catch(() => console.log('Error: cannot init map'))
+<<<<<<< HEAD
         })
+=======
+        }).catch(() => console.log('Error: cannot init map'))
+
+>>>>>>> 3a1f545feb8b2ac28f898dd49a0304ec1567b14e
     renderPlaces()
 }
 
@@ -138,4 +143,8 @@ function renderMapQueryParams() {
 
     if (!lat || !lng) return Promise.reject()
     else return Promise.resolve({ lat, lng })
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3a1f545feb8b2ac28f898dd49a0304ec1567b14e

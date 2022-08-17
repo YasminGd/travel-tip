@@ -94,13 +94,10 @@ function renderPlaces() {
     const strHTML = places
         .map(
             (place) => `
-        <li id="${place.id
-                }" class="place list-group-item"><img src="img/placemarker.png" alt="" />${place.name
-                }, lat: ${place.pos.lat.toFixed(3)}, lng: ${place.pos.lng.toFixed(
-                    3
-                )}<span class="point" onclick="app.onMoveTo(${place.pos.lat},${place.pos.lng
-                })"> Go There 👆</span><span onclick="app.onRemovePlace('${place.id
-                }')">X</span></li>`
+        <li id="${place.id}">
+            <img src="img/placemarker.png"/><span class="name-pos">${place.name}</span>, lat: ${place.pos.lat.toFixed(3)}, lng: ${place.pos.lng.toFixed(3)}
+            <br><span class="go-to-loc" onclick="app.onMoveTo(${place.pos.lat},${place.pos.lng})"> Go There 👆</span>
+            <br><span class="delete-loc" onclick="app.onRemovePlace('${place.id}')"><img src="img/trash.png" /></span></li>`
         ).join('')
 
     document.querySelector('.places-list').innerHTML = strHTML

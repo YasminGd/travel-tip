@@ -76,12 +76,9 @@ function _connectGoogleApi() {
     })
 }
 
-function moveTo(lat, lng, zoom) {
+function moveTo(lat, lng) {
     const pos = { lat, lng }
-    gMap = new google.maps.Map(document.getElementById('map'), {
-        zoom,
-        center: pos,
-    })
+    panTo(lat, lng)
     new google.maps.Marker({
         position: pos,
         map: gMap,

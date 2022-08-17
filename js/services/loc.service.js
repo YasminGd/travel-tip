@@ -9,7 +9,7 @@ export const locService = {
     getGLocs,
     getPlaceIdxByID,
     removePlace,
-    
+    getPlaceByPos
 }
 
 
@@ -44,9 +44,9 @@ function getPlaceIdxByID(placeId) {
     return gLocs.findIndex((place) => placeId === place.id)
 }
 
-// function getPlaceByID(placeId) {
-//     return gLocs.find((place) => placeId === place.id)
-// }
+function getPlaceByPos(pos) {
+    return gLocs.find((place) => place.pos.lat === pos.lat && place.pos.lng === pos.lng)
+}
 
 function getGLocs() {
     return gLocs
@@ -72,7 +72,7 @@ function getLocCords(loc) {
         })
 }
 
-// function moveToLocationById(id) {
+// function updateWeather(id) {
 //     const place = getPlaceByID(id)
 //     if (Date.now() - place.updatedAt > 1000 * 60 * 60 * 24) {
 //         weatherService.getWeather(place.pos)

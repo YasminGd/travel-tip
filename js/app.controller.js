@@ -81,11 +81,15 @@ function onRemovePlace(placeId) {
 }
 
 function onAddPlace(pos, name) {
-    locService.addPlace(pos, name).then(renderPlaces)
+    locService.addPlace(pos, name).then(() => {
+        renderPlaces()
+        renderWeather(pos)
+    })
 }
 
 function onMoveTo(lat, lng) {
     mapService.moveTo(lat, lng)
+    renderWeather({ lat, lng })
 }
 
 function renderPlaces() {
@@ -139,14 +143,15 @@ function renderMapQueryParams() {
     else return Promise.resolve({ lat, lng })
 }
 
-// function renderWeatherDetails(place) {
-//     const weather = place.weather
-//     const weatherHTML = `
-//     <h2>Weather today</h2>
-//     <p>${weather.description}</p>
-//     <p>${weather.temp}</p>
-//     <temperature from ${weather.minTemp} to ${weather.maxTemp}, wind ${weather.wind} m/s.</p>
-//     `
-//     document.querySelector('.weather').innerHTML = weatherHTML
+function renderWeather(pos) {
+    const weather = locService.getPlaceByPos(pos).weather
 
-// }
+    const weatherHTML = `
+        <h2>Weather today</h2>
+        <p>${weather.description}</p>
+        <p>${weather.temp}°C temperature from ${weather.minTemp}°C to ${weather.maxTemp}°C, wind ${weather.wind} m/s.</p>
+    `
+
+    document.querySelector('.weather').innerHTML = weatherHTML
+    
+}

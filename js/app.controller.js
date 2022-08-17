@@ -76,12 +76,12 @@ function onPanTo(lat = 35.6895, lng = 139.6917) {
 }
 
 function onRemovePlace(placeId) {
-    mapService.removePlace(placeId)
+    locService.removePlace(placeId)
     renderPlaces()
 }
 
 function onAddPlace(pos, name) {
-    mapService.addPlace(pos, name)
+    locService.addPlace(pos, name)
     renderPlaces()
 }
 
@@ -90,7 +90,7 @@ function onMoveTo(lat, lng, zoom) {
 }
 
 function renderPlaces() {
-    const places = mapService.getGPlaces()
+    const places = locService.getGLocs()
     const strHTML = places
         .map(
             (place) => `

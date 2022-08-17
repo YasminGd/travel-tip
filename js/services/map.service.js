@@ -1,20 +1,12 @@
-
-import { utilService } from './util.service.js'
-import { storageService } from './storage.service.js'
-
 export const mapService = {
     initMap,
     addMarker,
     panTo,
-    addPlace,
-    getGPlaces,
-    removePlace,
     moveTo,
 }
 
 // Var that is used throughout this Module (not global)
 var gMap
-let gPlaces = storageService.load('places') || [];
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
     console.log('InitMap')
@@ -83,25 +75,4 @@ function moveTo(lat, lng) {
         position: pos,
         map: gMap,
     })
-}
-
-// {id, name, lat, lng, weather, createdAt, updatedAt}
-function addPlace(pos, name) {
-    gPlaces.push({ id: utilService.makeId(3), pos, name })
-    storageService.save('places', gPlaces)
-}
-
-function getPlaceIdxByID(placeId) {
-    return gPlaces.findIndex((place) => placeId === place.id)
-}
-
-function getGPlaces() {
-    return gPlaces
-}
-
-function removePlace(placeId) {
-    const placeIdx = getPlaceIdxByID(placeId)
-    gPlaces.splice(placeIdx, 1)
-    storageService.save('places', gPlaces)
-    app.renderPlaces()
 }

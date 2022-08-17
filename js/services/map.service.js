@@ -1,11 +1,20 @@
+
+import { utilService } from './util.service.js'
+import { storageService } from './storage.service.js'
+
 export const mapService = {
     initMap,
     addMarker,
-    panTo
+    panTo,
+    addPlace,
+    getGPlaces,
+    removePlace,
+    moveTo,
 }
 
 // Var that is used throughout this Module (not global)
 var gMap
+let gPlaces = storageService.load('places') || [];
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
     console.log('InitMap')
@@ -18,10 +27,27 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
                 zoom: 15
             })
             console.log('Map!', gMap)
+
+            gMap.addListener('click', (mapsMouseEvent) => {
+                const lat = mapsMouseEvent.latLng.lat()
+                const lng = mapsMouseEvent.latLng.lng()
+                const position = { lat, lng }
+
+                const locationName = prompt('Enter location name')
+                if (locationName) {
+                    app.onAddPlace(position, locationName)
+
+                    new google.maps.Marker({
+                        position: position,
+                        map: gMap,
+                    })
+                }
+            })
         })
 }
 
 function addMarker(loc) {
+
     var marker = new google.maps.Marker({
         position: loc,
         map: gMap,
@@ -48,4 +74,37 @@ function _connectGoogleApi() {
         elGoogleApi.onload = resolve
         elGoogleApi.onerror = () => reject('Google script failed to load')
     })
+}
+
+function moveTo(lat, lng, zoom) {
+    const pos = { lat, lng }
+    gMap = new google.maps.Map(document.getElementById('map'), {
+        zoom,
+        center: pos,
+    })
+    new google.maps.Marker({
+        position: pos,
+        gMap,
+    })
+}
+
+// {id, name, lat, lng, weather, createdAt, updatedAt}
+function addPlace(pos, name) {
+    gPlaces.push({ id: utilService.makeId(3), pos, name })
+    storageService.save('places', gPlaces)
+}
+
+function getPlaceIdxByID(placeId) {
+    return gPlaces.findIndex((place) => placeId === place.id)
+}
+
+function getGPlaces() {
+    return gPlaces
+}
+
+function removePlace(placeId) {
+    const placeIdx = getPlaceIdxByID(placeId)
+    gPlaces.splice(placeIdx, 1)
+    storageService.save('places', gPlaces)
+    app.renderPlaces()
 }
